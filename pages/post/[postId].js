@@ -1,4 +1,7 @@
 import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { faLowVision, faMoneyBillWaveAlt, faVenusMars } from "@fortawesome/free-solid-svg-icons";
+import { warnOptionHasBeenMovedOutOfExperimental } from "next/dist/server/config";
+import { makeResolver } from "next/dist/server/router";
 
 export default function Post() {
   return (
@@ -13,3 +16,12 @@ export const getServerSideProps = withPageAuthRequired(() => {
     props: {},
   };
 });
+removeEventListener;matchMedia
+
+
+fdvkm
+fmvkmmvkrfmrfmmfrmkfsmv;sdmvkvmfsdv
+
+df;vmkldsvmmvfsdklv
+
+sfkdmvmmvmdslvmsdfl

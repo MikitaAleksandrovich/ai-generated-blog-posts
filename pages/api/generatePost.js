@@ -7,10 +7,7 @@ export default async function handler(req, res) {
 
   const openai = new OpenAIApi(config);
 
-  const topic = "Top 10 tips for dog owners";
-
-  const keywords =
-    "first-time dog owners, common dog health issues, best dog breeds";
+  const { topic, keywords } = req.body;
 
   const response = await openai.createCompletion({
     model: "text-davinci-003",
@@ -29,9 +26,7 @@ export default async function handler(req, res) {
 
   console.log("response", response);
 
-  res
-    .status(200)
-    .json({
-      post: JSON.parse(response.data.choices[0]?.text.split("\n").join("")),
-    });
+  res.status(200).json({
+    post: JSON.parse(response.data.choices[0]?.text.split("\n").join("")),
+  });
 }

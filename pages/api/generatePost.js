@@ -1,6 +1,25 @@
+import { withApiAuthRequired, getSession } from "@auth0/nextjs-auth0";
 import { Configuration, OpenAIApi } from "openai";
+import clientPromise from "../../lib/mongodb";
 
-export default async function handler(req, res) {
+export default withApiAuthRequired(async function handler(req, res) {
+  const { user } = await getSession(req, res);
+
+  // Set up mongo db connection to collection
+  const client = await clientPromise;
+  const db = client.db("BlogStandard");
+
+  // Find current user in mongo db collection
+  const currentUser = await db.collection("users").findOne({
+    auth0Id: user.sub,
+  });
+
+  // Don't do anything if user don't have tokens
+  if (!currentUser?.availableTokens) {
+    res.status(403);
+    return;
+  }
+
   const config = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
   });
@@ -88,6 +107,29 @@ export default async function handler(req, res) {
   console.log("TITLE: ", title);
   console.log("META DESCRIPTION: ", metaDescription);
 
+  // Decrement 1 token from user after generating a post
+  await db.collection("users").updateOne(
+    {
+      auth0Id: user.sub,
+    },
+    {
+      $inc: {
+        availableTokens: -1,
+      },
+    }
+  );
+
+  // Save generated post to db collection of posts
+  const post = await db.collection("posts").insertOne({
+    postContent,
+    title,
+    metaDescription,
+    topic,
+    keywords,
+    userId: currentUser._id,
+    created: new Date(),
+  });
+
   res.status(200).json({
     post: {
       postContent,
@@ -95,4 +137,4 @@ export default async function handler(req, res) {
       metaDescription,
     },
   });
-}
+});

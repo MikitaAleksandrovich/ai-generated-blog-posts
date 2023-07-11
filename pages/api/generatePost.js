@@ -37,9 +37,7 @@ export default withApiAuthRequired(async function handler(req, res) {
       },
       {
         role: "user",
-        content: `Write a long and detailed SEO-friendly blog post ${topic}, that targets the following comma-separated keywords: ${keywords}.
-          The contented should be formatted in SEO-friendly HTML, 
-          limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
+        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. Your response must be formatted as SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
       },
     ],
   });
@@ -57,9 +55,7 @@ export default withApiAuthRequired(async function handler(req, res) {
       },
       {
         role: "user",
-        content: `Write a long and detailed SEO-friendly blog post ${topic}, that targets the following comma-separated keywords: ${keywords}.
-          The contented should be formatted in SEO-friendly HTML, 
-          limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
+        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. The content should be formatted in SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
       },
       {
         role: "assistant",
@@ -82,9 +78,7 @@ export default withApiAuthRequired(async function handler(req, res) {
       },
       {
         role: "user",
-        content: `Write a long and detailed SEO-friendly blog post ${topic}, that targets the following comma-separated keywords: ${keywords}.
-          The contented should be formatted in SEO-friendly HTML, 
-          limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
+        content: `Write a long and detailed SEO-friendly blog post about ${topic}, that targets the following comma-separated keywords: ${keywords}. The content should be formatted in SEO-friendly HTML, limited to the following HTML tags: p, h1, h2, h3, h4, h5, h6, strong, li, ol, ul, i.`,
       },
       {
         role: "assistant",
@@ -102,10 +96,6 @@ export default withApiAuthRequired(async function handler(req, res) {
 
   const metaDescription =
     metaDescriptionResponse.data.choices[0]?.message?.content || "";
-
-  console.log("POST CONTENT: ", postContent);
-  console.log("TITLE: ", title);
-  console.log("META DESCRIPTION: ", metaDescription);
 
   // Decrement 1 token from user after generating a post
   await db.collection("users").updateOne(

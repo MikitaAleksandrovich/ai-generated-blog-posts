@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { Logo } from "../Logo";
 
-export const AppLayout = ({ children }) => {
+export const AppLayout = ({ children, ...rest }) => {
   const { user } = useUser();
+
+  console.log("app props", rest);
 
   return (
     // Set up 2 columns (first is 300px with, second is remaining space)

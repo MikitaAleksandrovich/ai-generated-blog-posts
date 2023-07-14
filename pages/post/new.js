@@ -90,6 +90,15 @@ NewPost.getLayout = function getLayout(page, pageProps) {
 export const getServerSideProps = withPageAuthRequired({
   async getServerSideProps(ctx) {
     const props = await getAppProps(ctx);
+
+    if (!props.availableTokens) {
+      return {
+        redirect: {
+          destination: "/token-topup",
+          permanent: false,
+        },
+      };
+    }
     return {
       props,
     };

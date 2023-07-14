@@ -58,6 +58,7 @@ export default function NewPost() {
                 className="resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm"
                 value={topic}
                 onChange={(event) => setTopic(event.target.value)}
+                maxLength={80}
               />
             </div>
             <div>
@@ -68,12 +69,17 @@ export default function NewPost() {
                 className="resize-none border border-slate-500 w-full block my-2 px-4 py-2 rounded-sm"
                 value={keywords}
                 onChange={(event) => setKeywords(event.target.value)}
+                maxLength={80}
               />
               <small className="block mb-2 ">
                 Separate keywords with a coma
               </small>
             </div>
-            <button type="submit" className="btn">
+            <button
+              type="submit"
+              className="btn"
+              disabled={!topic.trim() || !keywords.trim()}
+            >
               Generate
             </button>
           </form>

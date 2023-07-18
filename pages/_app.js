@@ -3,6 +3,7 @@ import { UserProvider } from "@auth0/nextjs-auth0/client";
 import { DM_Sans, DM_Serif_Display } from "@next/font/google";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
+import { PostsProvider } from "../context/postContext";
 config.autoAddCss = false;
 
 const dmSans = DM_Sans({
@@ -23,14 +24,16 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <UserProvider>
-      <main
-        className={`${dmSans.variable} ${dmSerifDisplay.variable} font-body`}
-      >
-        {
-          // Pass AppLayout to every component in the app
-          getLayout(<Component {...pageProps} />, pageProps)
-        }
-      </main>
+      <PostsProvider>
+        <main
+          className={`${dmSans.variable} ${dmSerifDisplay.variable} font-body`}
+        >
+          {
+            // Pass AppLayout to every component in the app
+            getLayout(<Component {...pageProps} />, pageProps)
+          }
+        </main>
+      </PostsProvider>
     </UserProvider>
   );
 }

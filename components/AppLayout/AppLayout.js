@@ -4,9 +4,23 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { Logo } from "../Logo";
+import { useContext, useEffect } from "react";
+import PostsContext from "../../context/postContext";
 
-export const AppLayout = ({ children, availableTokens, posts, postId }) => {
+export const AppLayout = ({
+  children,
+  availableTokens,
+  posts: postsFromSSR,
+  postId,
+}) => {
   const { user } = useUser();
+
+  const { setPostsFromSSR, posts, getPosts, noMorePosts } =
+    useContext(PostsContext);
+
+  useEffect(() => {
+    setPostsFromSSR(postsFromSSR);
+  }, [postsFromSSR, setPostsFromSSR]);
 
   return (
     // Set up 2 columns (first is 300px with, second is remaining space)
@@ -34,6 +48,16 @@ export const AppLayout = ({ children, availableTokens, posts, postId }) => {
               {post.topic}
             </Link>
           ))}
+          {!noMorePosts && (
+            <div
+              onClick={() =>
+                getPosts({ lastPostDate: posts[posts.length - 1].created })
+              }
+              className="hover:underline text-sm text-slate-400 text-center cursor-pointer mt-4"
+            >
+              Load more posts
+            </div>
+          )}
         </div>
         <div className="bg-cyan-800 flex items-center gap-2 border-t border-t-black/50 h-20 px-2">
           {!!user ? (

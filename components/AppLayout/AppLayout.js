@@ -12,6 +12,7 @@ export const AppLayout = ({
   availableTokens,
   posts: postsFromSSR,
   postId,
+  postCreated,
 }) => {
   const { user } = useUser();
 
@@ -20,7 +21,13 @@ export const AppLayout = ({
 
   useEffect(() => {
     setPostsFromSSR(postsFromSSR);
-  }, [postsFromSSR, setPostsFromSSR]);
+    if (postId) {
+      const exists = postsFromSSR.find((item) => item._id === postId);
+      if (!exists) {
+        getPosts({ getNewerPosts: true, lastPostDate: postCreated });
+      }
+    }
+  }, [postsFromSSR, setPostsFromSSR, postId, getPosts, postCreated]);
 
   return (
     // Set up 2 columns (first is 300px with, second is remaining space)

@@ -21,32 +21,35 @@ export const PostsProvider = ({ children }) => {
     });
   }, []);
 
-  const getPosts = useCallback(async ({ lastPostDate }) => {
-    const result = await fetch(`/api/getPosts`, {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({ lastPostDate }),
-    });
-    const json = await result.json();
-    const postsResult = json.posts || [];
-
-    if (postsResult.length < 5) {
-      setNoMorePosts(true);
-    }
-
-    setPosts((value) => {
-      const newPosts = [...value];
-      postsResult.forEach((post) => {
-        const exists = newPosts.find((item) => item._id === post._id);
-        if (!exists) {
-          newPosts.push(post);
-        }
+  const getPosts = useCallback(
+    async ({ lastPostDate, getNewerPosts = false }) => {
+      const result = await fetch(`/api/getPosts`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ lastPostDate, getNewerPosts }),
       });
-      return newPosts;
-    });
-  }, []);
+      const json = await result.json();
+      const postsResult = json.posts || [];
+
+      if (postsResult.length < 5) {
+        setNoMorePosts(true);
+      }
+
+      setPosts((value) => {
+        const newPosts = [...value];
+        postsResult.forEach((post) => {
+          const exists = newPosts.find((item) => item._id === post._id);
+          if (!exists) {
+            newPosts.push(post);
+          }
+        });
+        return newPosts;
+      });
+    },
+    []
+  );
 
   return (
     <PostsContext.Provider

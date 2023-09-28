@@ -19,7 +19,7 @@ const dmSerifDisplay = DM_Serif_Display({
 });
 
 function MyApp({ Component, pageProps }) {
-  // Checl if component has getLayout function, if not, return just page itself
+  // Check if component has getLayout function, if not, return just page itself
   const getLayout = Component.getLayout || ((page) => page);
 
   return (

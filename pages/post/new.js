@@ -15,6 +15,7 @@ export default function NewPost() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+
     try {
       const response = await fetch("/api/generatePost", {
         method: "POST",
@@ -24,13 +25,19 @@ export default function NewPost() {
         body: JSON.stringify({ topic, keywords }),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
       const json = await response.json();
+
+      // Check if json is not null or undefined and has a postId property.
+      if (json && json.postId) {
+        setIsLoading(false);
+        router.push(`/post/${json.postId}`);
+      }
     } catch (error) {
       setIsLoading(false);
-    }
-
-    if (json?.postId) {
-      router.push(`/post/${json.postId}`);
     }
   };
 

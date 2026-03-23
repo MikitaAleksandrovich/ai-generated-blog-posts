@@ -34,6 +34,12 @@ module.exports = {
           dark: "#38bdf8",
         },
       },
+      boxShadow: {
+        card: "0 20px 35px -25px rgba(15, 23, 42, 0.35)",
+      },
+      transitionDuration: {
+        theme: "250ms",
+      },
     },
   },
   plugins: [],

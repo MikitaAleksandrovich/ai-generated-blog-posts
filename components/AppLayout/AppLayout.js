@@ -30,13 +30,18 @@ export const AppLayout = ({
   }, [postsFromSSR, setPostsFromSSR, postId, getPosts, postCreated]);
 
   return (
-    // Set up 2 columns (first is 300px with, second is remaining space)
     <div className="grid grid-cols-[350px_1fr] h-screen max-h-screen">
       <div className="flex flex-col text-white overflow-hidden">
         <div className="bg-slate-800 px-2">
           <Logo />
           <Link href="/post/new" className="btn">
             New post
+          </Link>
+          <Link
+            href="/"
+            className="block mt-2 text-center px-4 py-2 rounded-md border border-white/20 hover:bg-white/10 transition-colors"
+          >
+            Blog
           </Link>
           <Link href="/token-topup" className="block mt-2 text-center ">
             <FontAwesomeIcon icon={faCoins} className="text-yellow-500" />

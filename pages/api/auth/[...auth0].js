@@ -1,3 +1,12 @@
-import { handleAuth } from "@auth0/nextjs-auth0";
+import { handleAuth, handleLogin } from "@auth0/nextjs-auth0";
 
-export default handleAuth();
+export default handleAuth({
+  async login(req, res) {
+    if (req.query.mockProvider === "apple") {
+      res.redirect("/api/auth/appleMock");
+      return;
+    }
+
+    return handleLogin(req, res);
+  },
+});

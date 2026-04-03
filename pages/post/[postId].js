@@ -12,6 +12,7 @@ import PostsContext from "../../context/postContext";
 export default function Post(props) {
   const router = useRouter();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const { deletePost } = useContext(PostsContext);
 
   const handleDeleteConfirm = async () => {
@@ -30,6 +31,35 @@ export default function Post(props) {
       }
     } catch (error) {
       console.error("DELETE POST ERROR", error);
+    }
+  };
+
+  const handleExportPdf = async () => {
+    setIsExporting(true);
+    try {
+      const response = await fetch(`/api/exportPostToPdf`, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ postId: props.id }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to export PDF");
+      }
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${props.title || "blog-post"}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("EXPORT PDF ERROR", error);
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -61,36 +91,45 @@ export default function Post(props) {
           Blog post
         </div>
         <div dangerouslySetInnerHTML={{ __html: props.postContent || "" }} />
-        <div className="my-4">
-          {!showDeleteConfirm && (
-            <button
-              className="btn bg-red-600 hover:bg-red-700"
-              onClick={() => setShowDeleteConfirm(true)}
-            >
-              Delete post
-            </button>
-          )}
-          {!!showDeleteConfirm && (
-            <div>
-              <p className="p-2 bg-red-300 text-center ">
-                Are you sure you want to delete this post?{" "}
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  onClick={() => setShowDeleteConfirm(false)}
-                  className="btn bg-stone-600 hover:bg-stone-700"
-                >
-                  cancel
-                </button>
-                <button
-                  onClick={handleDeleteConfirm}
-                  className="btn bg-red-600 hover:bg-red-700"
-                >
-                  confirm delete
-                </button>
+        <div className="my-4 space-y-4">
+          <button
+            className="btn bg-blue-600 hover:bg-blue-700"
+            onClick={handleExportPdf}
+            disabled={isExporting}
+          >
+            {isExporting ? "Preparing PDF..." : "Export to PDF"}
+          </button>
+          <div>
+            {!showDeleteConfirm && (
+              <button
+                className="btn bg-red-600 hover:bg-red-700"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                Delete post
+              </button>
+            )}
+            {!!showDeleteConfirm && (
+              <div>
+                <p className="p-2 bg-red-300 text-center ">
+                  Are you sure you want to delete this post?{" "}
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={() => setShowDeleteConfirm(false)}
+                    className="btn bg-stone-600 hover:bg-stone-700"
+                  >
+                    cancel
+                  </button>
+                  <button
+                    onClick={handleDeleteConfirm}
+                    className="btn bg-red-600 hover:bg-red-700"
+                  >
+                    confirm delete
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

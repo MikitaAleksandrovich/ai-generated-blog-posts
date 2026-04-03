@@ -1,0 +1,8 @@
+:root {
+  --pdf-font-size: 12;
+  --pdf-heading-color: #0f172a;
+  --pdf-text-color: #1f2937;
+  --pdf-meta-color: #475569;
+  --pdf-accent-color: #0ea5e9;
+  --pdf-margin: 50;
+}

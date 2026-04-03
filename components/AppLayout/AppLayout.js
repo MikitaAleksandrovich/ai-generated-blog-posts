@@ -4,8 +4,9 @@ import { useUser } from "@auth0/nextjs-auth0/client";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { Logo } from "../Logo";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import PostsContext from "../../context/postContext";
+import { mockTwitterSignIn } from "../../services/mockAuthService";
 
 export const AppLayout = ({
   children,
@@ -18,6 +19,8 @@ export const AppLayout = ({
 
   const { setPostsFromSSR, posts, getPosts, noMorePosts } =
     useContext(PostsContext);
+  const [mockAuthMessage, setMockAuthMessage] = useState(null);
+  const [isMockAuthLoading, setIsMockAuthLoading] = useState(false);
 
   useEffect(() => {
     setPostsFromSSR(postsFromSSR);
@@ -28,6 +31,26 @@ export const AppLayout = ({
       }
     }
   }, [postsFromSSR, setPostsFromSSR, postId, getPosts, postCreated]);
+
+  const handleMockTwitterSignIn = async () => {
+    setIsMockAuthLoading(true);
+    setMockAuthMessage(null);
+    try {
+      const response = await mockTwitterSignIn();
+      const username = response?.user?.username || "mock_user";
+      setMockAuthMessage({
+        type: "success",
+        text: `Mock Twitter sign-in successful for @${username}.`,
+      });
+    } catch (error) {
+      setMockAuthMessage({
+        type: "error",
+        text: "Mock Twitter sign-in failed. Please try again.",
+      });
+    } finally {
+      setIsMockAuthLoading(false);
+    }
+  };
 
   return (
     // Set up 2 columns (first is 300px with, second is remaining space)
@@ -66,9 +89,9 @@ export const AppLayout = ({
             </div>
           )}
         </div>
-        <div className="bg-cyan-800 flex items-center gap-2 border-t border-t-black/50 h-20 px-2">
+        <div className="bg-cyan-800 border-t border-t-black/50 px-2 py-3 min-h-[5rem]">
           {!!user ? (
-            <>
+            <div className="flex items-center gap-2">
               <div className="min-w-[50px]">
                 <Image
                   src={user.picture}
@@ -84,9 +107,36 @@ export const AppLayout = ({
                   Logout
                 </Link>
               </div>
-            </>
+            </div>
           ) : (
-            <Link href="/api/auth/login">Login</Link>
+            <div className="flex flex-col gap-2">
+              <Link href="/api/auth/login" className="btn">
+                Login
+              </Link>
+              <button
+                type="button"
+                onClick={handleMockTwitterSignIn}
+                className="btn bg-sky-500 hover:bg-sky-600 disabled:bg-sky-300 disabled:cursor-not-allowed"
+                disabled={isMockAuthLoading}
+              >
+                {isMockAuthLoading ? "Signing in..." : "Mock Twitter Sign-In"}
+              </button>
+              <p className="text-xs text-slate-200">
+                This mock option is for demo purposes only and is separate from
+                real authentication.
+              </p>
+              {mockAuthMessage && (
+                <div
+                  className={`text-xs ${
+                    mockAuthMessage.type === "error"
+                      ? "text-red-200"
+                      : "text-emerald-200"
+                  }`}
+                >
+                  {mockAuthMessage.text}
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>

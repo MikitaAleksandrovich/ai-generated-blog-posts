@@ -20,6 +20,20 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+## Please Copilot
+
+To get high-quality suggestions from GitHub Copilot, keep prompts concrete and scoped:
+
+- Reference specific files or functions and describe the desired change (“In `pages/post/new.js`, add validation that...”).  
+- Share relevant snippets when possible so Copilot can infer context and naming patterns.  
+- State constraints upfront (e.g., “No new dependencies”, “Follow Tailwind utility classes already in use”).  
+- Ask for stepwise help if you’re unsure (“First outline the approach, then provide the code”).
+
+Example prompts:
+
+- “Please Copilot: In `pages/api/generatePost.js`, add error handling so failures return a 500 with a JSON error message, keeping the existing response format.”  
+- “Please Copilot: Show me how to add a reusable `Spinner` component in `components/` that follows the current Tailwind style and can be used during loading states in `pages/post/new.js`.”
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

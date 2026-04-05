@@ -84,7 +84,7 @@ export default function NewPost() {
             </div>
             <button
               type="submit"
-              className="btn"
+              className="btn mt-4"
               disabled={!topic.trim() || !keywords.trim()}
             >
               Generate

@@ -63,10 +63,7 @@ export default function Post(props) {
         <div dangerouslySetInnerHTML={{ __html: props.postContent || "" }} />
         <div className="my-4">
           {!showDeleteConfirm && (
-            <button
-              className="btn bg-red-600 hover:bg-red-700"
-              onClick={() => setShowDeleteConfirm(true)}
-            >
+            <button className="btn" onClick={() => setShowDeleteConfirm(true)}>
               Delete post
             </button>
           )}
@@ -78,14 +75,11 @@ export default function Post(props) {
               <div className="grid grid-cols-2 gap-2">
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
-                  className="btn bg-stone-600 hover:bg-stone-700"
+                  className="btn"
                 >
                   cancel
                 </button>
-                <button
-                  onClick={handleDeleteConfirm}
-                  className="btn bg-red-600 hover:bg-red-700"
-                >
+                <button onClick={handleDeleteConfirm} className="btn">
                   confirm delete
                 </button>
               </div>

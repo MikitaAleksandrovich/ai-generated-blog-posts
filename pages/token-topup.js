@@ -18,7 +18,7 @@ export default function TokenTopup() {
   return (
     <div>
       <h1>This is the token topup page</h1>
-      <button className="btn" onClick={handleClick}>
+      <button className="btn mt-4 max-w-xs" onClick={handleClick}>
         Add Tokens
       </button>
     </div>

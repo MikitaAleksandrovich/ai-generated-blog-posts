@@ -7,6 +7,19 @@ import { Logo } from "../Logo";
 import { useContext, useEffect } from "react";
 import PostsContext from "../../context/postContext";
 
+const topNavLinks = [
+  { label: "How it works", href: "/#how-it-works" },
+  { label: "Developers", href: "/#developers" },
+  { label: "Backlog AI", href: "/#backlog-ai" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "FAQ", href: "/#faq" },
+  {
+    label: "Contact Us",
+    href: "https://www.google.com",
+    external: true,
+  },
+];
+
 export const AppLayout = ({
   children,
   availableTokens,
@@ -90,7 +103,34 @@ export const AppLayout = ({
           )}
         </div>
       </div>
-      {children}
+      <div className="h-full overflow-hidden flex flex-col">
+        <nav className="app-top-nav" aria-label="Primary navigation">
+          {topNavLinks.map((link) => {
+            const linkClassName = `top-nav-link${
+              link.external ? " top-nav-link--cta" : ""
+            }`;
+            if (link.external) {
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkClassName}
+                >
+                  {link.label}
+                </a>
+              );
+            }
+            return (
+              <Link key={link.label} href={link.href} className={linkClassName}>
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="flex-1 overflow-hidden">{children}</div>
+      </div>
     </div>
   );
 };

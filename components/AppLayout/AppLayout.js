@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { Logo } from "../Logo";
 import { useContext, useEffect } from "react";
+import { useRouter } from "next/router";
 import PostsContext from "../../context/postContext";
 
 export const AppLayout = ({
@@ -15,6 +16,8 @@ export const AppLayout = ({
   postCreated,
 }) => {
   const { user } = useUser();
+  const router = useRouter();
+  const isAuthPage = router.pathname === "/login" || router.pathname === "/signup";
 
   const { setPostsFromSSR, posts, getPosts, noMorePosts } =
     useContext(PostsContext);
@@ -30,8 +33,11 @@ export const AppLayout = ({
   }, [postsFromSSR, setPostsFromSSR, postId, getPosts, postCreated]);
 
   return (
-    // Set up 2 columns (first is 300px with, second is remaining space)
-    <div className="grid grid-cols-[350px_1fr] h-screen max-h-screen">
+    <div
+      className={`grid grid-cols-[350px_1fr] h-screen max-h-screen ${
+        isAuthPage ? "auth-page-background" : ""
+      }`}
+    >
       <div className="flex flex-col text-white overflow-hidden">
         <div className="bg-slate-800 px-2">
           <Logo />

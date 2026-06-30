@@ -62,4 +62,9 @@
     }
 }
 
-
+@layer base {
+    .auth-page-bg {
+        min-height: 100vh;
+        background-color: #fef08a;
+    }
+}
